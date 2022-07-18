@@ -1,24 +1,30 @@
 def merge_sort_rec(arr)
-  return arr[0] if arr.length < 2
-  mid = arr.length / 2 - 1
-  new_arr = []
-  arr_a = []
-  arr_b = []
-  arr_a.push(merge_sort_rec(arr[0..mid]))
-  arr_b.push(merge_sort_rec(arr[(mid + 1)..-1]))
-  arr_a.flatten!
-  arr_b.flatten!
-  until arr_a.empty? || arr_b.empty?
-    if arr_a[0] <= arr_b[0]
-      new_arr.push(arr_a.shift())
-    else
-      new_arr.push(arr_b.shift())
-    end
+  if arr.length < 2
+    return arr
+  else
+    mid = arr.length / 2 - 1
+    arr_left = merge_sort_rec(arr[0..mid])
+    arr_right = merge_sort_rec(arr[(mid + 1)..-1])
+    merge(arr_left, arr_right)
   end
-  new_arr.push(arr_a) if arr_b.empty?
-  new_arr.push(arr_b) if arr_a.empty?
-  return new_arr.flatten!
 end
 
-array = [2, 1, 8, 5, 7, 6, 3, 4]
+def merge(left, right, temp_arr = [])
+  until left.empty? || right.empty?
+    if left[0] <= right[0]
+      temp_arr << left.shift()
+    else
+      temp_arr << right.shift()
+    end
+  end
+  temp_arr << right if left.empty?
+  temp_arr << left if right.empty?
+  temp_arr.flatten!
+end
+
+array = []
+rand(100).times do
+  array << rand(100)
+end
+
 p merge_sort_rec(array)
